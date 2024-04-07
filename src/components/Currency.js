@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, createContext } from 'react';
+
 
 const CurrencyDropdown = ({ options, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectCurrency, setSelectCurrency] = useState('£ Pound');
-  const [warning,setWarning] = useState(false)
+  const CurrencyContext = createContext();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -12,36 +13,34 @@ const CurrencyDropdown = ({ options, onSelect }) => {
   const handleOptionClick = (option) => {
     setSelectCurrency(option);
     setIsOpen(false);
-    // setWarning(true);
   };
 
   return (
-    <>
-      <button className="alert alert-secondary" onClick={toggleDropdown}>
-        Currency ({selectCurrency}) &#9660;
-      </button>
-      {isOpen && (
-        <div 
-        className="alert alert-secondary"
-        // onMouseEnter={()=>setWarning(true)} 
-        // onMouseLeave={()=>setWarning(false)}
-        >
-          {currencyList.map((currency) => (
-            <div 
-            onMouseEnter={()=>setWarning(true)}
-            onMouseLeave={()=>setWarning(false)}
-            >
-              <h6 
-              key={currency.index}
-              onClick={() => handleOptionClick(currency.option)}
-              style={
-                {backgroundColor: warning? 'white' : 'transparent'}}
-              >{currency.option}</h6></div>
-            
-          ))}
-        </div>
-      )}
-    </>
+    <CurrencyContext.Provider value={selectCurrency}>
+            <div class="dropdown">
+            <button 
+                class="btn btn-secondary dropdown-toggle" 
+                type="button" 
+                id="dropdownMenu2" 
+                data-toggle="dropdown" 
+                aria-haspopup="true" 
+                aria-expanded="false"
+                onClick={toggleDropdown}>
+                Currency({selectCurrency})
+            </button>
+            {isOpen &&
+                <div class="alert alert-secondary">
+                    {currencyList.map((currency)=>
+                                        <button 
+                                        class="dropdown-item" 
+                                        type="button" 
+                                        onClick={()=>handleOptionClick(currency.option)}>
+                                            {currency.option}</button>
+                        )}
+                </div>
+            }
+            </div>
+    </CurrencyContext.Provider>
   );
 };
 
