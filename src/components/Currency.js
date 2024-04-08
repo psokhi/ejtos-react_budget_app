@@ -1,23 +1,28 @@
-import React, { useState, createContext } from 'react';
+import React, { useContext, useState } from 'react';
+import { AppContext } from '../context/AppContext';
 
 
 const CurrencyDropdown = ({ options, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectCurrency, setSelectCurrency] = useState('£ Pound');
-  const CurrencyContext = createContext();
+  const {dispatch} = useContext(AppContext);
+
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (option) => {
+  const handleOptionClick = (option,symb) => {
     setSelectCurrency(option);
     setIsOpen(false);
+    dispatch({
+        type:'CHG_CURRENCY', 
+        payload:symb
+    });
   };
 
   return (
-    <CurrencyContext.Provider value={selectCurrency}>
-            <div class="dropdown">
+        <div class="dropdown">
             <button 
                 class="btn btn-secondary dropdown-toggle" 
                 type="button" 
@@ -34,21 +39,20 @@ const CurrencyDropdown = ({ options, onSelect }) => {
                                         <button 
                                         class="dropdown-item" 
                                         type="button" 
-                                        onClick={()=>handleOptionClick(currency.option)}>
+                                        onClick={()=>handleOptionClick(currency.option, currency.symbol)}>
                                             {currency.option}</button>
                         )}
                 </div>
             }
-            </div>
-    </CurrencyContext.Provider>
+        </div>
   );
 };
 
 let currencyList = [
-    {index:1, option: "$ Dollar"},
-    {index:2, option:"£ Pound"}, 
-    {index:3, option:"€ Euro"}, 
-    {index:4, option:"₹ Ruppee"}
+    {index:1, option: "$ Dollar", symbol: "$"},
+    {index:2, option:"£ Pound", symbol: "£"}, 
+    {index:3, option:"€ Euro", symbol: "€"}, 
+    {index:4, option:"₹ Ruppee", symbol: "₹"}
 ]
 
 export default CurrencyDropdown;
