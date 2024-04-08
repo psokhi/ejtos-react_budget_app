@@ -26,6 +26,7 @@ const CurrencyDropdown = ({ options, onSelect }) => {
             <button 
                 class="btn btn-secondary dropdown-toggle" 
                 type="button" 
+                color='green'
                 id="dropdownMenu2" 
                 data-toggle="dropdown" 
                 aria-haspopup="true" 
